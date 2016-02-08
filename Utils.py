@@ -57,5 +57,4 @@ def get_data_prob(data_dir, n_ans):
 def split_data(X, Y, train_size=0.75):
     n_samples, n_features = X.shape
     n_train = int(n_samples * train_size)
-    print(n_train)
     return X[:n_train], Y[:n_train], X[n_train:], Y[n_train:]
