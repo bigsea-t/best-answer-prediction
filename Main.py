@@ -1,6 +1,7 @@
 from Utils import *
 import sys
 from sklearn.linear_model import LogisticRegression
+from sklearn import svm
 from sklearn.metrics import accuracy_score
 
 
@@ -14,13 +15,21 @@ if __name__ == '__main__':
 
     Xtr, Ytr, Xte, Yte = split_data(X, Y)
 
-    model = LogisticRegression(penalty='l2', fit_intercept='True')
-    model.fit(Xtr, Ytr)
+    models = {
+        'Logistic Regression': LogisticRegression(penalty='l2', fit_intercept='True'),
+        'Linear SVM': svm.LinearSVC(),
+        'RBF SVM': svm.SVC(kernel='rbf')
+    }
 
-    Ypre_te = model.predict(Xte)
-    Ypre_tr = model.predict(Xtr)
+    for name, model in models.items():
+        model.fit(Xtr, Ytr)
 
-    print('training set accuracy:', accuracy_score(Ytr, Ypre_tr))
-    print('test set accuracy:    ', accuracy_score(Yte, Ypre_te))
+        Ypre_te = model.predict(Xte)
+        Ypre_tr = model.predict(Xtr)
+
+        print('-- {} --'.format(name))
+        print('training set accuracy:', accuracy_score(Ytr, Ypre_tr))
+        print('test set accuracy:    ', accuracy_score(Yte, Ypre_te))
+        print()
 
 
