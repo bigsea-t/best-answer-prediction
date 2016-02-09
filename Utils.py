@@ -17,7 +17,7 @@ def remove_tags(s):
     return s
 
 
-def json_to_data_inner(js, func_y, max_score_th=3):
+def json_to_data(js, max_score_th=3):
     texts = []
     Y = []
     for q in js:
@@ -27,8 +27,7 @@ def json_to_data_inner(js, func_y, max_score_th=3):
             continue
         for ans in answers:
             t = remove_tags(ans['Body'])
-            score = int(ans['Score'])
-            y = func_y(max_score, score)
+            y = int(ans['Score'])
 
             texts.append(t)
             Y.append(y)
@@ -42,32 +41,52 @@ def json_to_data_inner(js, func_y, max_score_th=3):
 
 def get_data_score(data_dir, n_ans):
     js = get_json(data_dir, n_ans)
-    return json_to_data_inner(js, lambda mx, s: s)
+    X, Y, feature_names = json_to_data(js)
+    X, Y = reshape_data(X, Y, n_ans)
+
+    return X, Y, feature_names
 
 
-def get_data_bin(data_dir, n_ans):
-    js = get_json(data_dir, n_ans)
-    return json_to_data_inner(js, lambda mx, s: 1 if mx==s else 0)
+def reshape_data(X, Y, n_ans):
+    n_all_ans, n_features = X.shape
+    n_questions = n_all_ans // n_ans
+
+    if n_questions * n_ans != n_all_ans:
+        raise ValueError("the number of all answers have to be propotion of n_ans")
+
+    # convert sparse matrix to dense one
+    # since reshape is not supported in sparse one
+    # and it's only for 2-D matrix
+
+    X = X.toarray()
+    X = X.reshape((n_questions, n_ans, n_features))
+    Y = Y.reshape((n_questions, n_ans))
+
+    return X, Y
 
 
-def get_data_prob(data_dir, n_ans):
-    js = get_json(data_dir, n_ans)
-    return json_to_data_inner(js, lambda mx, s: s / mx)
+def binarize_score(y):
+    n_questions, n_ans = y.shape
+
+    binarized_y = np.zeros_like(y)
+    binarized_y[np.arange(n_questions), y.argmax(axis=1)] = 1
+
+    return binarized_y
 
 
-def split_data(X, Y, n_ans, train_size=0.75):
-    n_samples, n_features = X.shape
-    n_train = int(n_samples * train_size) // n_ans * n_ans
+def split_data(X, Y, train_size=0.75):
+    n_questions, n_ans, n_features = X.shape
+    n_train = int(n_questions*train_size)
     return X[:n_train], Y[:n_train], X[n_train:], Y[n_train:]
 
 
 def prec_at_1(Yprob, Y, n_ans):
-    Yprob = Yprob[:,1]
+    Yprob = Yprob[:, 1]
     n_samples, = Yprob.shape
     n_questions = n_samples / n_ans
 
-    Yprob = Yprob.reshape(n_questions, n_ans)
-    Y = Y.reshape(n_questions, n_ans)
+    Yprob = Yprob.reshape((n_questions, n_ans))
+    Y = Y.reshape((n_questions, n_ans))
 
     Ypred = Yprob.argmax(axis=1)
     Y = Y.argmax(axis=1)

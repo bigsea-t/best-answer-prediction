@@ -19,29 +19,42 @@ def dump_model(model, name, data_dir):
 def sort_features(feature_names, score):
     return sorted(zip(score, feature_names), reverse=True)
 
+
+class LogisticRegressionWrapper(LogisticRegression):
+    def fit(self, X, y, sample_weight=None):
+        n_questions, n_ans, n_features = X.shape
+        y = binarize_score(y)
+        y = y.reshape(n_questions * n_ans)
+        X = X.reshape((n_questions * n_ans, n_features))
+        super(LogisticRegressionWrapper, self).fit(X, y, sample_weight)
+
+    def predict_score(self, X):
+        return self.predict_log_proba(X)
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         raise Exception('only one argument is allowed (data_dir)')
     data_dir = sys.argv[1]
 
     n_ans = 5
-    X, Y, feature_names = get_data_bin(data_dir, n_ans)
+    X, Y, feature_names = get_data_score(data_dir, n_ans)
 
-    Xtr, Ytr, Xte, Yte = split_data(X, Y, n_ans)
+    Xtr, Ytr, Xte, Yte = split_data(X, Y)
 
-    models = {
-        'Logistic Regression': LogisticRegression(penalty='l2', fit_intercept='True')#,
+    cls_models = {
+        'Logistic Regression': LogisticRegressionWrapper(penalty='l2', fit_intercept='True')#,
         # 'Linear SVM': SVC(kernel='linear', probability=True),
         # 'RBF SVM': SVC(kernel='rbf', probability=True)
     }
 
-    for name, model in models.items():
+    for name, model in cls_models.items():
         model.fit(Xtr, Ytr)
 
         dump_model(model, name, data_dir)
 
-        Yprob_te = model.predict_log_proba(Xte)
-        Yprob_tr = model.predict_log_proba(Xtr)
+        Yprob_te = model.predict_score(Xte)
+        Yprob_tr = model.predict_score(Xtr)
 
         sorted_features = sort_features(feature_names, model.coef_[0])
 
