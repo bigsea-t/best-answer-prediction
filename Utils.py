@@ -59,6 +59,19 @@ def binarize_score(y, n_ans):
     return binarized_y.flatten()
 
 
+def reguralize_score(y, n_ans):
+    n_samples, = y.shape
+    n_questions = n_samples // n_ans
+
+    if n_questions * n_ans != n_samples:
+        raise ValueError('n_ans * n_questions != n_samples')
+
+    y = y.reshape(n_questions, n_ans)
+    y = y / y.max(axis=1)[:, np.newaxis]
+
+    return y.flatten()
+
+
 def split_data(X, Y, n_ans, train_size=0.75):
     n_samples, n_features = X.shape
     n_train = int(n_samples * train_size) // n_ans * n_ans
@@ -66,7 +79,6 @@ def split_data(X, Y, n_ans, train_size=0.75):
 
 
 def prec_at_1(Yprob, Y, n_ans):
-    Yprob = Yprob[:, 1]
     n_samples, = Yprob.shape
     n_questions = n_samples / n_ans
 

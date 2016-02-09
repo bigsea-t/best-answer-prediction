@@ -1,7 +1,6 @@
 from Utils import *
+from ModelWrapper import *
 import sys
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
 import pickle
 
 
@@ -16,23 +15,6 @@ def dump_model(model, name, data_dir):
         pickle.dump(model, f)
 
 
-def sort_features(feature_names, score):
-    return sorted(zip(score, feature_names), reverse=True)
-
-
-class LogisticRegressionWrapper(LogisticRegression):
-    def __init__(self, n_ans, *args, **kwargs):
-        super(LogisticRegressionWrapper, self).__init__(*args, **kwargs)
-        self.n_ans = n_ans
-
-    def fit(self, X, y, sample_weight=None):
-        y = binarize_score(y, self.n_ans)
-        super(LogisticRegressionWrapper, self).fit(X, y, sample_weight)
-
-    def predict_score(self, X):
-        return self.predict_proba(X)
-
-
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         raise Exception('only one argument is allowed (data_dir)')
@@ -41,13 +23,21 @@ if __name__ == '__main__':
     n_ans = 5
     X, Y, feature_names = get_data_score(data_dir, n_ans)
 
+    Y = reguralize_score(Y, n_ans)
+
     Xtr, Ytr, Xte, Yte = split_data(X, Y, n_ans)
 
     models = {
-        'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True')#,
-        # 'Linear SVM': SVC(kernel='linear', probability=True),
-        # 'RBF SVM': SVC(kernel='rbf', probability=True)
+        'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True'),
+        'Linear Regression': LinearRegressionWrapper(),
+        'Linear SVM': LinearSVCWrapper(n_ans=n_ans),
+        'RBF SVM': SVCWrapper(n_ans=n_ans, kernel='rbf'),
+        'Ridge Regression': RidgeWrapper(alpha=2)
     }
+    # TODO: add linear SVR, some Boosting's
+
+    # NOTE: Non-Linear SVM is not scalable
+    # On top of that, Linear SVM is supposed to be enough for this high dimensional features
 
     for name, model in models.items():
         model.fit(Xtr, Ytr)
@@ -57,7 +47,7 @@ if __name__ == '__main__':
         Yprob_te = model.predict_score(Xte)
         Yprob_tr = model.predict_score(Xtr)
 
-        sorted_features = sort_features(feature_names, model.coef_[0])
+        sorted_features = model.sort_features(feature_names)
 
         print('-- {} --'.format(name))
         print('training set accuracy:', prec_at_1(Yprob_tr, Ytr, n_ans))
