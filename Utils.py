@@ -1,6 +1,6 @@
 import numpy as np
 import json
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 import re
 
 
@@ -32,11 +32,12 @@ def json_to_data_inner(js, func_y, max_score_th=3):
 
             texts.append(t)
             Y.append(y)
-
-    vectorizer = TfidfVectorizer(stop_words='english', max_df=1, min_df=0)
+    vectorizer = CountVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
     X = vectorizer.fit_transform(texts)
     Y = np.array(Y)
-    return X, Y
+    feature_names = vectorizer.get_feature_names()
+
+    return X, Y, feature_names
 
 
 def get_data_score(data_dir, n_ans):
