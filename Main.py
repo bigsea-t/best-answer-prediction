@@ -21,15 +21,16 @@ def sort_features(feature_names, score):
 
 
 class LogisticRegressionWrapper(LogisticRegression):
+    def __init__(self, n_ans, *args, **kwargs):
+        super(LogisticRegressionWrapper, self).__init__(*args, **kwargs)
+        self.n_ans = n_ans
+
     def fit(self, X, y, sample_weight=None):
-        n_questions, n_ans, n_features = X.shape
-        y = binarize_score(y)
-        y = y.reshape(n_questions * n_ans)
-        X = X.reshape((n_questions * n_ans, n_features))
+        y = binarize_score(y, self.n_ans)
         super(LogisticRegressionWrapper, self).fit(X, y, sample_weight)
 
     def predict_score(self, X):
-        return self.predict_log_proba(X)
+        return self.predict_proba(X)
 
 
 if __name__ == '__main__':
@@ -40,15 +41,15 @@ if __name__ == '__main__':
     n_ans = 5
     X, Y, feature_names = get_data_score(data_dir, n_ans)
 
-    Xtr, Ytr, Xte, Yte = split_data(X, Y)
+    Xtr, Ytr, Xte, Yte = split_data(X, Y, n_ans)
 
-    cls_models = {
-        'Logistic Regression': LogisticRegressionWrapper(penalty='l2', fit_intercept='True')#,
+    models = {
+        'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True')#,
         # 'Linear SVM': SVC(kernel='linear', probability=True),
         # 'RBF SVM': SVC(kernel='rbf', probability=True)
     }
 
-    for name, model in cls_models.items():
+    for name, model in models.items():
         model.fit(Xtr, Ytr)
 
         dump_model(model, name, data_dir)

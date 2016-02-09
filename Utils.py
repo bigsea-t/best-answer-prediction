@@ -42,41 +42,26 @@ def json_to_data(js, max_score_th=3):
 def get_data_score(data_dir, n_ans):
     js = get_json(data_dir, n_ans)
     X, Y, feature_names = json_to_data(js)
-    X, Y = reshape_data(X, Y, n_ans)
-
     return X, Y, feature_names
 
 
-def reshape_data(X, Y, n_ans):
-    n_all_ans, n_features = X.shape
-    n_questions = n_all_ans // n_ans
+def binarize_score(y, n_ans):
+    n_samples, = y.shape
+    n_questions = n_samples // n_ans
 
-    if n_questions * n_ans != n_all_ans:
-        raise ValueError("the number of all answers have to be propotion of n_ans")
+    if n_questions * n_ans != n_samples:
+        raise ValueError('n_ans * n_questions != n_samples')
 
-    # convert sparse matrix to dense one
-    # since reshape is not supported in sparse one
-    # and it's only for 2-D matrix
-
-    X = X.toarray()
-    X = X.reshape((n_questions, n_ans, n_features))
-    Y = Y.reshape((n_questions, n_ans))
-
-    return X, Y
-
-
-def binarize_score(y):
-    n_questions, n_ans = y.shape
-
+    y = y.reshape(n_questions, n_ans)
     binarized_y = np.zeros_like(y)
     binarized_y[np.arange(n_questions), y.argmax(axis=1)] = 1
 
-    return binarized_y
+    return binarized_y.flatten()
 
 
-def split_data(X, Y, train_size=0.75):
-    n_questions, n_ans, n_features = X.shape
-    n_train = int(n_questions*train_size)
+def split_data(X, Y, n_ans, train_size=0.75):
+    n_samples, n_features = X.shape
+    n_train = int(n_samples * train_size) // n_ans * n_ans
     return X[:n_train], Y[:n_train], X[n_train:], Y[n_train:]
 
 
