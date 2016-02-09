@@ -54,7 +54,23 @@ def get_data_prob(data_dir, n_ans):
     return json_to_data_inner(js, lambda mx, s: s / mx)
 
 
-def split_data(X, Y, train_size=0.75):
+def split_data(X, Y, n_ans, train_size=0.75):
     n_samples, n_features = X.shape
-    n_train = int(n_samples * train_size)
+    n_train = int(n_samples * train_size) // n_ans * n_ans
     return X[:n_train], Y[:n_train], X[n_train:], Y[n_train:]
+
+
+def prec_at_1(Yprob, Y, n_ans):
+    Yprob = Yprob[:,1]
+    n_samples, = Yprob.shape
+    n_questions = n_samples / n_ans
+
+    Yprob = Yprob.reshape(n_questions, n_ans)
+    Y = Y.reshape(n_questions, n_ans)
+
+    Ypred = Yprob.argmax(axis=1)
+    Y = Y.argmax(axis=1)
+
+    prec = (Y == Ypred).sum() / n_questions
+
+    return prec
