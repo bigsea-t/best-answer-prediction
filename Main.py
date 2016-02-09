@@ -31,7 +31,6 @@ if __name__ == '__main__':
         'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True'),
         'Linear Regression': LinearRegressionWrapper(),
         'Linear SVM': LinearSVCWrapper(n_ans=n_ans),
-        'RBF SVM': SVCWrapper(n_ans=n_ans, kernel='rbf'),
         'Ridge Regression': RidgeWrapper(alpha=2)
     }
     # TODO: add linear SVR, some Boosting's
