@@ -12,12 +12,9 @@ def get_json(data_dir, n_ans):
 
 
 def remove_tags(s):
-    tag_re = re.compile(r'<[^>]+>|\n|\r')
-    s = tag_re.sub(' ', s)
-    return s
+    return re.sub(r'\s*?<[^>]*?>\s*',' ',s)
 
-
-def json_to_data(js, max_score_th=3):
+def json_to_data_raw(js, max_score_th=3):
     texts = []
     Y = []
     for q in js:
@@ -26,23 +23,29 @@ def json_to_data(js, max_score_th=3):
         if max_score <= max_score_th:
             continue
         for ans in answers:
-            t = remove_tags(ans['Body'])
+            t = ans['Body']
             y = int(ans['Score'])
 
             texts.append(t)
             Y.append(y)
+    Y = np.array(Y)
+    return texts, Y
+
+def json_to_data(js, max_score_th=3):
+    texts, Y = json_to_data_raw(js, max_score_th)
+    texts = [remove_tags(i) for i in texts]
     vectorizer = CountVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
     X = vectorizer.fit_transform(texts)
-    Y = np.array(Y)
     feature_names = vectorizer.get_feature_names()
 
     return X, Y, feature_names
 
 
+def get_raw_data_score(data_dir, n_ans):
+    return json_to_data_raw(get_json(data_dir, n_ans))
+
 def get_data_score(data_dir, n_ans):
-    js = get_json(data_dir, n_ans)
-    X, Y, feature_names = json_to_data(js)
-    return X, Y, feature_names
+    return json_to_data(get_json(data_dir, n_ans))
 
 
 def binarize_score(y, n_ans):
