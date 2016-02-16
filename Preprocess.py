@@ -51,3 +51,5 @@ if __name__ == '__main__':
     data_dir = sys.argv[1]
 
     organize_all(data_dir)
+
+    print('done')

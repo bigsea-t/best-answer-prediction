@@ -5,10 +5,14 @@ import re
 from os import listdir
 
 
-def get_json(data_dir, n_ans):
+def get_json(data_dir, n_ans, n_files=None):
     files = [file for file in listdir(data_dir) if re.match(r'ans{}-[0-9]\.dat'.format(n_ans), file) is not None]
+
+    if n_files is None:
+        n_files = len(files)
+
     out = []
-    for file_name in files:
+    for file_name in files[:n_files]:
         with open(data_dir + file_name) as file:
             data = json.load(file)
         out = out + data
@@ -65,14 +69,8 @@ def transform_raw_data(questions, answers):
     return Xq, Xa, feature_names
 
 
-def get_raw_data_score(data_dir, n_ans):
-    return json_to_data_raw(get_json(data_dir, n_ans))
-
-
-# don't use this fucntion, just separete them
-
-# def get_data_score(data_dir, n_ans):
-#     return json_to_data(get_json(data_dir, n_ans))
+def get_raw_data_score(data_dir, n_ans, n_files=None):
+    return json_to_data_raw(get_json(data_dir, n_ans, n_files=n_files))
 
 
 def binarize_score(y, n_ans):

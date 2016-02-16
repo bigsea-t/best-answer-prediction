@@ -46,7 +46,7 @@ if __name__ == '__main__':
             print()
             
     else:
-        questions, answers, scores = get_raw_data_score(data_dir, n_ans)
+        questions, answers, scores = get_raw_data_score(data_dir, n_ans, n_files=10)
         Xq, Xa, feature_names = transform_raw_data(questions, answers)
         feature_names.append('correlation qa')
 
