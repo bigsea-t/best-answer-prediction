@@ -2,14 +2,17 @@ import numpy as np
 import json
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import re
-from pprint import pprint
+from os import listdir
 
 
 def get_json(data_dir, n_ans):
-    file_name = 'ans{}.dat'.format(n_ans)
-    with open(data_dir + file_name) as file:
-        data = json.load(file)
-    return data
+    files = [file for file in listdir(data_dir) if re.match(r'ans{}-[0-9]\.dat'.format(n_ans), file) is not None]
+    out = []
+    for file_name in files:
+        with open(data_dir + file_name) as file:
+            data = json.load(file)
+        out = out + data
+    return out
 
 
 def remove_tags(s):
@@ -42,7 +45,7 @@ def json_to_data_raw(js, max_score_th=3):
 
 
 def transform_raw_data(questions, answers):
-    n_questions =len(questions)
+    n_questions = len(questions)
     n_answers = len(answers)
     n_each_answers = n_answers // n_questions
     assert(n_each_answers * n_questions == n_answers)
@@ -51,7 +54,7 @@ def transform_raw_data(questions, answers):
     answers = [remove_tags(i) for i in answers]
 
     # vectorizer = CountVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
-    vectorizer = TfidfVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
+    vectorizer = TfidfVectorizer(stop_words='english', min_df=0.01, max_df=0.99)
 
     vectorizer.fit(questions + answers)
 
