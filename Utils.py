@@ -10,7 +10,7 @@ def get_json(data_dir, n_ans, n_files=None):
         files = [file for file in listdir(data_dir) if re.match(r'ans{}\.dat'.format(n_ans), file) is not None]
         n_files = len(files)
     else:
-        files = [file for file in listdir(data_dir) if re.match(r'ans{}(-[0-9])?\.dat'.format(n_ans), file) is not None]
+        files = [file for file in listdir(data_dir) if re.match(r'ans{}(-[0-9]+)?\.dat'.format(n_ans), file) is not None]
 
     out = []
     for file_name in files[:n_files]:
