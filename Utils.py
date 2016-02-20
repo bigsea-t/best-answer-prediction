@@ -49,7 +49,7 @@ def json_to_data_raw(js, max_score_th=3):
     return questions, answers, scores
 
 
-def transform_raw_data(questions, answers. remove_tag=True):
+def transform_raw_data(questions, answers, remove_tag=True):
     n_questions = len(questions)
     n_answers = len(answers)
     n_each_answers = n_answers // n_questions
