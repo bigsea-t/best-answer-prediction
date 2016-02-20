@@ -1,51 +1,76 @@
 import numpy as np
 import json
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import re
+from os import listdir
 
 
-def get_json(data_dir, n_ans):
-    file_name = 'ans{}.dat'.format(n_ans)
-    with open(data_dir + file_name) as file:
-        data = json.load(file)
-    return data
+def get_json(data_dir, n_ans, n_files=None):
+    files = [file for file in listdir(data_dir) if re.match(r'ans{}-[0-9]\.dat'.format(n_ans), file) is not None]
+
+    if n_files is None:
+        n_files = len(files)
+
+    out = []
+    for file_name in files[:n_files]:
+        with open(data_dir + file_name) as file:
+            data = json.load(file)
+        out = out + data
+    return out
 
 
 def remove_tags(s):
     return re.sub(r'\s*?<[^>]*?>\s*',' ',s)
 
+
 def json_to_data_raw(js, max_score_th=3):
-    texts = []
+    questions = []
+    answers = []
     Y = []
     for q in js:
-        answers = q['Children']
-        max_score = max([int(ans['Score']) for ans in answers])
+        ans_json = q['Children']
+
+        max_score = max([int(ans['Score']) for ans in ans_json])
         if max_score <= max_score_th:
             continue
-        for ans in answers:
+
+        questions.append(q['Title'] + ' ' + q['Body'])
+
+        for ans in ans_json:
             t = ans['Body']
             y = int(ans['Score'])
 
-            texts.append(t)
+            answers.append(t)
             Y.append(y)
-    Y = np.array(Y)
-    return texts, Y
 
-def json_to_data(js, max_score_th=3):
-    texts, Y = json_to_data_raw(js, max_score_th)
-    texts = [remove_tags(i) for i in texts]
-    vectorizer = CountVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
-    X = vectorizer.fit_transform(texts)
+    scores = np.array(Y)
+
+    return questions, answers, scores
+
+
+def transform_raw_data(questions, answers):
+    n_questions = len(questions)
+    n_answers = len(answers)
+    n_each_answers = n_answers // n_questions
+    assert(n_each_answers * n_questions == n_answers)
+
+    questions = [remove_tags(i) for i in questions]
+    answers = [remove_tags(i) for i in answers]
+
+    # vectorizer = CountVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
+    vectorizer = TfidfVectorizer(stop_words='english', min_df=0.01, max_df=0.99)
+
+    vectorizer.fit(questions + answers)
+
+    Xq = vectorizer.transform(questions)
+    Xa = vectorizer.transform(answers)
     feature_names = vectorizer.get_feature_names()
 
-    return X, Y, feature_names
+    return Xq, Xa, feature_names
 
 
-def get_raw_data_score(data_dir, n_ans):
-    return json_to_data_raw(get_json(data_dir, n_ans))
-
-def get_data_score(data_dir, n_ans):
-    return json_to_data(get_json(data_dir, n_ans))
+def get_raw_data_score(data_dir, n_ans, n_files=None):
+    return json_to_data_raw(get_json(data_dir, n_ans, n_files=n_files))
 
 
 def binarize_score(y, n_ans):
@@ -75,10 +100,14 @@ def reguralize_score(y, n_ans):
     return y.flatten()
 
 
-def split_data(X, Y, n_ans, train_size=0.75):
-    n_samples, n_features = X.shape
-    n_train = int(n_samples * train_size) // n_ans * n_ans
-    return X[:n_train], Y[:n_train], X[n_train:], Y[n_train:]
+def split_data(Xq, Xa, Y, n_ans, train_size=0.75):
+    n_samples, n_features = Xq.shape
+    n_train_q = int(n_samples * train_size)
+    n_train_a = n_train_q * n_ans
+
+    return Xq[:n_train_q], Xa[:n_train_a], Y[:n_train_a],\
+        Xq[n_train_q:], Xa[n_train_a:], Y[n_train_a:]
+
 
 
 def prec_at_1(Yprob, Y, n_ans):
