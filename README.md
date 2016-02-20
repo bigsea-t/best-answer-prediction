@@ -13,6 +13,6 @@ python Preprocess.py DATASET_DIRECTORY
 - Run Predictor
 
 ```
-python Main.py DATASET_DIRECTORY
+python Main.py DATASET_DIRECTORY <ML/Heuristic>[0/1]
 ```
 
