@@ -6,10 +6,11 @@ from os import listdir
 
 
 def get_json(data_dir, n_ans, n_files=None):
-    files = [file for file in listdir(data_dir) if re.match(r'ans{}-[0-9]\.dat'.format(n_ans), file) is not None]
-
     if n_files is None:
+        files = [file for file in listdir(data_dir) if re.match(r'ans{}\.dat'.format(n_ans), file) is not None]
         n_files = len(files)
+    else:
+        files = [file for file in listdir(data_dir) if re.match(r'ans{}(-[0-9])?\.dat'.format(n_ans), file) is not None]
 
     out = []
     for file_name in files[:n_files]:
@@ -48,14 +49,15 @@ def json_to_data_raw(js, max_score_th=3):
     return questions, answers, scores
 
 
-def transform_raw_data(questions, answers):
+def transform_raw_data(questions, answers. remove_tag=True):
     n_questions = len(questions)
     n_answers = len(answers)
     n_each_answers = n_answers // n_questions
     assert(n_each_answers * n_questions == n_answers)
 
-    questions = [remove_tags(i) for i in questions]
-    answers = [remove_tags(i) for i in answers]
+    if remove_tag:
+        questions = [remove_tags(i) for i in questions]
+        answers = [remove_tags(i) for i in answers]
 
     # vectorizer = CountVectorizer(stop_words='english', min_df=0.01, max_df=1.0)
     vectorizer = TfidfVectorizer(stop_words='english', min_df=0.01, max_df=0.99)
