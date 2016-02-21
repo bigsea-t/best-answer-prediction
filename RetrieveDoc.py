@@ -3,6 +3,17 @@ import sys
 
 
 def include_all_subs(string, subs):
+    '''
+    Parameters
+    ----------
+    strings: string
+
+    subs: List(str)
+
+    Returns: bool
+    -------
+
+    '''
     return sum([sub.lower() in string.lower() for sub in subs]) == len(subs)
 
 
@@ -49,5 +60,6 @@ if __name__ == '__main__':
         raise Exception('Usage: python RetrieveDoc.py <data_dir>')
     data_dir = sys.argv[1]
     n_ans = 5
-    words = ['answers']
+    # words = ['answers']
+    words = ['edit']
     main(data_dir, n_ans, words)
