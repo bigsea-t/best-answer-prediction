@@ -46,7 +46,7 @@ if __name__ == '__main__':
             print()
             
     else:
-        questions, answers, scores = get_raw_data_score(data_dir, n_ans, n_files=10)
+        questions, answers, scores = get_raw_data_score(data_dir, n_ans, n_files=100)
         Xq, Xa, feature_names = transform_raw_data(questions, answers)
         feature_names.append('correlation qa')
 
@@ -79,16 +79,21 @@ if __name__ == '__main__':
     
         # NOTE: Non-Linear SVM is not scalable
         # On top of that, Linear SVM is supposed to be enough for this high dimensional features
-    
+
+        use_cach = True
+
         for name, model in models.items():
             # Xtr = sp.sparse.hstack((Xatr, simZtr[:, np.newaxis]))
             # Xte = sp.sparse.hstack((Xate, simZte[:, np.newaxis]))
             Xtr = Xatr
             Xte = Xate
 
-            model.fit(Xtr, Ytr)
+            if use_cach:
+                model = load_model(name, data_dir)
+            else:
+                model.fit(Xtr, Ytr)
 
-            dump_model(model, name, data_dir)
+                dump_model(model, name, data_dir)
     
             score_ans_tr = model.predict_score(Xtr)
             score_ans_te = model.predict_score(Xte)
@@ -98,8 +103,8 @@ if __name__ == '__main__':
             print('-- {} --'.format(name))
             print('training set accuracy:', prec_at_1(score_ans_tr, Ytr, n_ans))
             print('test set accuracy:    ', prec_at_1(score_ans_te, Yte, n_ans))
-            print('high score feature:\n', sorted_features[:10])
-            print('low score feature :\n', sorted_features[-10:])
+            print('high score feature:\n', sorted_features[:20])
+            print('low score feature :\n', sorted_features[-20:])
             print()
 
             model2 = LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True')
