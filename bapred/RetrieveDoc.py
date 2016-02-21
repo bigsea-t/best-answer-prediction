@@ -1,5 +1,6 @@
-from Utils import *
 import sys
+
+from bapred.Utils import *
 
 
 def include_all_subs(string, subs):

@@ -1,6 +1,7 @@
 from sklearn.linear_model import LogisticRegression, LinearRegression, Ridge
 from sklearn.svm import SVC, LinearSVC
-from Utils import *
+
+from bapred.Utils import *
 
 
 def sort_features(feature_names, score):

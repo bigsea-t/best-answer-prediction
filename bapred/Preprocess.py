@@ -1,8 +1,9 @@
-from Utils import *
-import sys
-from os import listdir
-from collections import Counter
 import re
+import sys
+from collections import Counter
+from os import listdir
+
+from bapred.Utils import *
 
 
 def count_n_questions(posts):

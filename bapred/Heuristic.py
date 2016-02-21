@@ -1,6 +1,9 @@
-from Utils import *
-import numpy as np
 import re
+
+import numpy as np
+
+from bapred.Utils import *
+
 
 class DummyHeuristic:
     def __init__(self, n_ans):
