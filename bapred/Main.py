@@ -1,10 +1,11 @@
-from Utils import *
-from ModelWrapper import *
+import pickle
+import sys
+
+import scipy as sp
 from Heuristic import *
 from sklearn.decomposition import TruncatedSVD
-import sys
-import pickle
-import scipy as sp
+
+from bapred.ModelWrapper import *
 
 
 def load_model(name, data_dir):

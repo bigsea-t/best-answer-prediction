@@ -1,7 +1,6 @@
-from Utils import *
-from ModelWrapper import *
 import sys
-import scipy as sp
+
+from bapred.ModelWrapper import *
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
