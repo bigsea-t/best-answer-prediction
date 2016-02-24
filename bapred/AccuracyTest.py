@@ -1,16 +1,18 @@
 import sys
 
 from bapred.ModelWrapper import *
+from sklearn.decomposition import TruncatedSVD
+import scipy as sp
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        raise Exception('Usage: python Main.py <data_dir>')
+        raise Exception('Usage: python AccuracyTest.py <data_dir>')
     data_dir = sys.argv[1]
 
     train_acc = [[],[]]
     test_acc = [[],[]]
-    for n_ans in range(519):
-        questions, answers, scores = get_raw_data_score(data_dir, n_ans)
+    for n_ans in [2, 5, 10, 15, 20]: #range(519):
+        questions, answers, scores = get_raw_data_score(data_dir, n_ans, n_files=102)
         if len(questions)==0:
             continue
         for rt in [True, False]:
@@ -22,6 +24,20 @@ if __name__ == '__main__':
             Xqtr, Xatr, Ytr, Xqte, Xate, Yte = split_data(Xq, Xa, Y, n_ans)
             if Xatr.size==0 or Xate.size==0:
                 continue
+
+            svd = TruncatedSVD(n_components=100)
+            Xqatr = sp.sparse.vstack((Xqtr, Xatr))
+            svd.fit(Xqatr)
+
+            Zqtr = svd.transform(Xqtr)
+            Zatr = svd.transform(Xatr)
+            A = np.repeat(Zqtr, n_ans, axis=0)
+            B = Zatr
+            simZtr = np.sum(A * B, axis=1) / (np.sqrt(np.sum(A * A, axis=1)) * np.sqrt(np.sum(B * B, axis=1)) + np.finfo(float).eps)
+
+            Zqte = svd.transform(Xqte)
+            Zate = svd.transform(Xate)
+            simZte = np.sum(np.repeat(Zqte, n_ans, axis=0) * Zate, axis=1)
 
             models = {
                 'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True'),
@@ -35,8 +51,8 @@ if __name__ == '__main__':
             # On top of that, Linear SVM is supposed to be enough for this high dimensional features
 
             for name, model in models.items():
-                # Xtr = sp.sparse.hstack((Xatr, simZtr[:, np.newaxis]))
-                # Xte = sp.sparse.hstack((Xate, simZte[:, np.newaxis]))
+                Xtr = sp.sparse.hstack((Xatr, simZtr[:, np.newaxis]))
+                Xte = sp.sparse.hstack((Xate, simZte[:, np.newaxis]))
                 Xtr = Xatr
                 Xte = Xate
 
@@ -48,7 +64,9 @@ if __name__ == '__main__':
                 sorted_features = model.sort_features(feature_names)
                 trainacc = prec_at_1(score_ans_tr, Ytr, n_ans)
                 testacc = prec_at_1(score_ans_te, Yte, n_ans)
-                print('-- {}, {}, {} --'.format(name, n_ans))
+
+                print('with qa correlation by LSA')
+                print('-- {}, {}, {} --'.format(name, n_ans, rt))
                 print('training set accuracy:', trainacc)
                 print('test set accuracy:    ', testacc)
                 print('high score feature:\n', sorted_features[:10])
