@@ -25,7 +25,8 @@ class WordLengthHeuristic:
     
     def predict_score(self, X):
         return np.array([len(remove_tags(i).split(' ')) for i in X])
-        
+
+# Use number of characters as heuristic value and treat codes blocks' length as `cof`*length
 class CharNCodeLengthHeuristic:
     def __init__(self, n_ans):
         self.n_ans = n_ans
@@ -37,7 +38,8 @@ class CharNCodeLengthHeuristic:
     
     def partition(self, texts):
         return [(remove_tags(self.pattern.sub("", i)), remove_tags("".join(self.pattern.findall(i)))) for i in texts]
-                 
+              
+# Use number of sentences as heuristic value
 class SentenceLengthHeuristic:
     def __init__(self, n_ans):
         self.n_ans = n_ans
@@ -48,6 +50,7 @@ class SentenceLengthHeuristic:
     def sentence_number(self, text):
         return len(list(filter(lambda i:i, re.split('[\.\?\!]\s+', remove_tags(text)))))
 
+# Use number of sentences as heuristic value, but with code blocks' length as `cof`*length
 class SentenceNCodeLengthHeuristic:
     def __init__(self, n_ans):
         self.n_ans = n_ans
@@ -63,6 +66,7 @@ class SentenceNCodeLengthHeuristic:
     def partition(self, texts):
         return [(remove_tags(self.pattern.sub("", i)), remove_tags("".join(self.pattern.findall(i)))) for i in texts]
 
+# Use number 
 class AvgSentenceLengthHeuristic:
     def __init__(self, n_ans):
         self.n_ans = n_ans

@@ -2,11 +2,16 @@ import pickle
 import sys
 
 import scipy as sp
-from Heuristic import *
+from bapred.Heuristic import *
 from sklearn.decomposition import TruncatedSVD
 
 from bapred.ModelWrapper import *
+#from sklearn.neural_network import MLPRegressor
+from theano import *
+import theano.tensor as T
 
+
+print(sklearn.__version__)
 
 def load_model(name, data_dir):
     with open('{}{}.pkl'.format(data_dir, name), 'rb') as f:
@@ -96,7 +101,7 @@ if __name__ == '__main__':
         print('Sim generated')
 
         models = {
-            'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True'),
+            'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True')
             # 'Linear Regression': LinearRegressionWrapper(),
             # 'Linear SVM': LinearSVCWrapper(n_ans=n_ans),
             # 'Ridge Regression': RidgeWrapper(alpha=2)

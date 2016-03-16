@@ -1,0 +1,143 @@
+LogisticRegression:
+
+Model with rank: 1
+Mean validation score: 0.287 (std: 0.011)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 0.80000000000000004, 'dual': False, 'fit_intercept': True, 'class_weight': None, 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'warm_start': False, 'verbose': 0, 'solver': 'sag', 'max_iter': 100, 'n_jobs': -1}
+
+Model with rank: 2
+Mean validation score: 0.287 (std: 0.012)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 0.90000000000000002, 'dual': False, 'fit_intercept': True, 'class_weight': None, 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'warm_start': False, 'verbose': 0, 'solver': 'lbfgs', 'max_iter': 100, 'n_jobs': -1}
+
+Model with rank: 3
+Mean validation score: 0.286 (std: 0.010)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 0.70000000000000007, 'dual': False, 'fit_intercept': True, 'class_weight': None, 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'warm_start': False, 'verbose': 0, 'solver': 'newton-cg', 'max_iter': 100, 'n_jobs': -1}
+
+Model with rank: 4
+Mean validation score: 0.284 (std: 0.012)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 1.1000000000000001, 'dual': False, 'fit_intercept': True, 'class_weight': None, 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'warm_start': False, 'verbose': 0, 'solver': 'sag', 'max_iter': 100, 'n_jobs': -1}
+
+Model with rank: 5
+Mean validation score: 0.284 (std: 0.009)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 0.40000000000000002, 'dual': False, 'fit_intercept': True, 'class_weight': None, 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'warm_start': False, 'verbose': 0, 'solver': 'liblinear', 'max_iter': 100, 'n_jobs': -1}
+
+Model with rank: 1
+Train Accuracy: 0.321232655695
+Test Accuracy: 0.301064859632
+Model with rank: 2
+Train Accuracy: 0.321878025169
+Test Accuracy: 0.302032913843
+Model with rank: 3
+Train Accuracy: 0.322362052275
+Test Accuracy: 0.301548886738
+Model with rank: 4
+Train Accuracy: 0.321716682801
+Test Accuracy: 0.300580832527
+Model with rank: 5
+Train Accuracy: 0.319135204905
+Test Accuracy: 0.297192642788
+
+LinearSVC:
+Model with rank: 1
+Mean validation score: 0.286 (std: 0.009)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 0.30000000000000004, 'dual': True, 'fit_intercept': True, 'class_weight': None, 'loss': 'squared_hinge', 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'verbose': 0, 'max_iter': 1000}
+
+Model with rank: 2
+Mean validation score: 0.285 (std: 0.010)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 2.8000000000000003, 'dual': True, 'fit_intercept': True, 'class_weight': None, 'loss': 'squared_hinge', 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'verbose': 0, 'max_iter': 1000}
+
+Model with rank: 3
+Mean validation score: 0.285 (std: 0.010)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 3.2000000000000002, 'dual': True, 'fit_intercept': True, 'class_weight': None, 'loss': 'squared_hinge', 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'verbose': 0, 'max_iter': 1000}
+
+Model with rank: 4
+Mean validation score: 0.285 (std: 0.010)
+Parameters: {'penalty': 'l2', 'multi_class': 'ovr', 'C': 3.0000000000000004, 'dual': True, 'fit_intercept': True, 'class_weight': None, 'loss': 'squared_hinge', 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'verbose': 0, 'max_iter': 1000}
+
+Model with rank: 5
+Mean validation score: 0.142 (std: 0.019)
+Parameters: {'penalty': 'l2', 'multi_class': 'crammer_singer', 'C': 3.9000000000000004, 'dual': True, 'fit_intercept': True, 'class_weight': None, 'loss': 'squared_hinge', 'intercept_scaling': 1, 'random_state': None, 'tol': 0.0001, 'verbose': 0, 'max_iter': 1000}
+
+Model with rank: 1
+Train Accuracy: 0.321393998064
+Test Accuracy: 0.306873184898
+Model with rank: 2
+Train Accuracy: 0.322039367538
+Test Accuracy: 0.30348499516
+Model with rank: 3
+Train Accuracy: 0.322039367538
+Test Accuracy: 0.30348499516
+Model with rank: 4
+Train Accuracy: 0.322039367538
+Test Accuracy: 0.30348499516
+Model with rank: 5
+Train Accuracy: 0.119232010326
+Test Accuracy: 0.114714424008
+
+Linear Regression:
+
+Model with rank: 1
+Mean validation score: 0.284 (std: 0.007)
+Parameters: {'copy_X': True, 'normalize': True, 'fit_intercept': False, 'n_jobs': -1}
+
+Model with rank: 2
+Mean validation score: 0.284 (std: 0.007)
+Parameters: {'copy_X': True, 'normalize': False, 'fit_intercept': False, 'n_jobs': -1}
+
+Model with rank: 3
+Mean validation score: 0.263 (std: 0.008)
+Parameters: {'copy_X': True, 'normalize': True, 'fit_intercept': True, 'n_jobs': -1}
+
+Model with rank: 4
+Mean validation score: 0.263 (std: 0.008)
+Parameters: {'n_jobs': -1, 'normalize': False, 'fit_intercept': True, 'copy_X': True}
+
+Model with rank: 1
+Train Accuracy: 0.32074862859
+Test Accuracy: 0.305421103582
+Model with rank: 2
+Train Accuracy: 0.32074862859
+Test Accuracy: 0.305421103582
+Model with rank: 3
+Train Accuracy: 0.302678283317
+Test Accuracy: 0.277831558567
+Model with rank: 4
+Train Accuracy: 0.302678283317
+Test Accuracy: 0.277831558567
+
+Ridge:
+
+Model with rank: 1
+Mean validation score: 0.289 (std: 0.007)
+Parameters: {'normalize': False, 'tol': 0.001, 'alpha': 0.5, 'random_state': None, 'copy_X': True, 'solver': 'sparse_cg', 'max_iter': None, 'fit_intercept': True}
+
+Model with rank: 2
+Mean validation score: 0.289 (std: 0.006)
+Parameters: {'random_state': None, 'fit_intercept': True, 'alpha': 0.59999999999999998, 'copy_X': True, 'solver': 'sag', 'normalize': False, 'max_iter': None, 'tol': 0.001}
+
+Model with rank: 3
+Mean validation score: 0.289 (std: 0.006)
+Parameters: {'normalize': False, 'tol': 0.001, 'alpha': 0.5, 'random_state': None, 'copy_X': True, 'solver': 'auto', 'max_iter': None, 'fit_intercept': True}
+
+Model with rank: 4
+Mean validation score: 0.289 (std: 0.006)
+Parameters: {'random_state': None, 'fit_intercept': True, 'alpha': 0.5, 'copy_X': True, 'solver': 'sparse_cg', 'normalize': True, 'max_iter': None, 'tol': 0.001}
+
+Model with rank: 5
+Mean validation score: 0.288 (std: 0.007)
+Parameters: {'random_state': None, 'fit_intercept': True, 'alpha': 0.59999999999999998, 'copy_X': True, 'solver': 'cholesky', 'normalize': True, 'max_iter': None, 'tol': 0.001}
+
+Model with rank: 1
+Train Accuracy: 0.321071313327
+Test Accuracy: 0.30880929332
+Model with rank: 2
+Train Accuracy: 0.321232655695
+Test Accuracy: 0.309293320426
+Model with rank: 3
+Train Accuracy: 0.321071313327
+Test Accuracy: 0.30880929332
+Model with rank: 4
+Train Accuracy: 0.321071313327
+Test Accuracy: 0.309777347531
+Model with rank: 5
+Train Accuracy: 0.321232655695
+Test Accuracy: 0.30880929332
