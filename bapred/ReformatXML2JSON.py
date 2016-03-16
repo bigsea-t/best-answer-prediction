@@ -1,4 +1,4 @@
-# This file is for reformatting the XML into JSON
+# This script is for reformatting the XML archieve of stackoverflow into JSON
 
 import regex
 import html
@@ -67,7 +67,7 @@ def parseOneLine(s):
         other.append(res)
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        raise Exception('Usage: python ReformatXML2JSON.py <data_dir>')
+        raise Exception('Usage: python ReformatXML2JSON.py <XML data>')
     with ThreadPoolExecutor(max_workers=100) as executor:
         for i in open(sys.argv[1], encoding="utf-8"):
             if "<?xml" in i or i=="<posts>\n":

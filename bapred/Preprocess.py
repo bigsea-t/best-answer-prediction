@@ -5,6 +5,7 @@ from os import listdir
 
 from bapred.Utils import *
 
+# This script is for organizing dataset by their number of answers.
 
 def count_n_questions(posts):
     counter = Counter()
