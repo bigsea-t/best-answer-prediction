@@ -1,6 +1,6 @@
 import unittest
 
-from bapred.RetrieveDoc import *
+from bapred.retrieve_doc import *
 
 
 class RetrieveDocTestCase(unittest.TestCase):

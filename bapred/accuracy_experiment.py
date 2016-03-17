@@ -1,15 +1,15 @@
 import sys
 
-from bapred.ModelWrapper import *
+from bapred.model_wrapper import *
 from sklearn.decomposition import TruncatedSVD
 import scipy as sp
-from bapred.Utils import *
+from bapred.utils import *
 
 # This script is for test the accuracy of different models
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        raise Exception('Usage: python AccuracyTest.py <data_dir>')
+        raise Exception('Usage: python accuracy_experiment.py <data_dir>')
     data_dir = sys.argv[1]
 
     train_acc = [[],[]]

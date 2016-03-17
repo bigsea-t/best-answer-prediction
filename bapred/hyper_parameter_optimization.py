@@ -2,10 +2,10 @@ import pickle
 import sys
 
 import scipy as sp
-from bapred.Heuristic import *
+from bapred.heuristic import *
 from sklearn.decomposition import TruncatedSVD
 
-from bapred.ModelWrapper import *
+from bapred.model_wrapper import *
 
 #load datas as in main.py
 print('Main...')

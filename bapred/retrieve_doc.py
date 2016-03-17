@@ -1,6 +1,6 @@
 import sys
 
-from bapred.Utils import *
+from bapred.utils import *
 
 # This file is for searching occurance of specifiy words in dataset
 
@@ -59,7 +59,7 @@ def main(data_dir, n_ans, words):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        raise Exception('Usage: python RetrieveDoc.py <data_dir>')
+        raise Exception('Usage: python retrieve_doc.py <data_dir>')
     data_dir = sys.argv[1]
     n_ans = 5
     # words = ['answers']

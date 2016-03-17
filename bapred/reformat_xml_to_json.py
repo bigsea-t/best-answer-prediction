@@ -67,7 +67,7 @@ def parseOneLine(s):
         other.append(res)
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        raise Exception('Usage: python ReformatXML2JSON.py <XML data>')
+        raise Exception('Usage: python reformat_xml_to_json.py <XML data>')
     with ThreadPoolExecutor(max_workers=100) as executor:
         for i in open(sys.argv[1], encoding="utf-8"):
             if "<?xml" in i or i=="<posts>\n":

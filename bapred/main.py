@@ -2,10 +2,10 @@ import pickle
 import sys
 
 import scipy as sp
-from bapred.Heuristic import *
+from bapred.heuristic import *
 from sklearn.decomposition import TruncatedSVD
 
-from bapred.ModelWrapper import *
+from bapred.model_wrapper import *
 
 
 def load_model(name, data_dir):
@@ -43,7 +43,7 @@ def generate_corr(Xq, Xa, n_ans, svd):
 if __name__ == '__main__':
     print('Main...')
     if len(sys.argv) != 3:
-        raise Exception('Usage: python Main.py <data_dir> <ML/Heuristic/Mixed>[0/1/2]')
+        raise Exception('Usage: python main.py <data_dir> <ML/Heuristic/Mixed>[0/1/2]')
     data_dir = sys.argv[1]
     h_mode = int(sys.argv[2])
 

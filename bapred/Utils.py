@@ -138,7 +138,7 @@ def prec_at_1(Yprob, Y, n_ans):
 
 def prec_at_1_model(model, X, y):
     '''calculate the accuracy of a model'''
-    import bapred.ModelWrapper
+    import bapred.model_wrapper
     n_ans = 10
     Y = eval("bapred.ModelWrapper."+model.__class__.__name__+"Wrapper").predict_score(model, X)
     return prec_at_1(Y, y, n_ans)

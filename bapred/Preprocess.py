@@ -3,7 +3,7 @@ import sys
 from collections import Counter
 from os import listdir
 
-from bapred.Utils import *
+from bapred.utils import *
 
 # This script is for organizing dataset by their number of answers.
 

@@ -2,7 +2,7 @@ import re
 
 import numpy as np
 
-from bapred.Utils import *
+from bapred.utils import *
 
 # Use random number as heuristic value
 class DummyHeuristic:

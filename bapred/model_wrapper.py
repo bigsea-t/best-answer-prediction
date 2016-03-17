@@ -1,9 +1,9 @@
 from sklearn.linear_model import LogisticRegression, LinearRegression, Ridge
 from sklearn.svm import SVC, LinearSVC
 
-from bapred.Utils import binarize_score
+from bapred.utils import binarize_score
 
-# ModelWrapper.py is for consistent interface of different models
+# model_wrapper.py is for consistent interface of different models
 
 def sort_features(feature_names, score):
     '''sort features according to their scores'''
