@@ -4,6 +4,8 @@ from bapred.ModelWrapper import *
 from sklearn.decomposition import TruncatedSVD
 import scipy as sp
 
+# This script is for test the accuracy of different models
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         raise Exception('Usage: python AccuracyTest.py <data_dir>')
@@ -39,6 +41,7 @@ if __name__ == '__main__':
             Zate = svd.transform(Xate)
             simZte = np.sum(np.repeat(Zqte, n_ans, axis=0) * Zate, axis=1)
 
+            # models to test
             models = {
                 'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True'),
                 'Linear Regression': LinearRegressionWrapper(),

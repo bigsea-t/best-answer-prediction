@@ -2,7 +2,7 @@ import pickle
 import sys
 
 import scipy as sp
-from Heuristic import *
+from bapred.Heuristic import *
 from sklearn.decomposition import TruncatedSVD
 
 from bapred.ModelWrapper import *
@@ -43,12 +43,12 @@ def generate_corr(Xq, Xa, n_ans, svd):
 if __name__ == '__main__':
     print('Main...')
     if len(sys.argv) != 3:
-        raise Exception('Usage: python Main.py <data_dir> <ML/Heuristic>[0/1]')
+        raise Exception('Usage: python Main.py <data_dir> <ML/Heuristic/Mixed>[0/1/2]')
     data_dir = sys.argv[1]
     h_mode = int(sys.argv[2])
 
-    n_ans = 5
-    if h_mode:
+    n_ans = 10
+    if h_mode==1:
         _, X, Y = get_raw_data_score(data_dir, n_ans)
         Y = reguralize_score(Y, n_ans)
         
@@ -69,7 +69,7 @@ if __name__ == '__main__':
             print('accuracy:    ', prec_at_1(Yprob, Y, n_ans))
             print()
             
-    else:
+    elif h_mode==0:
         questions, answers, scores = get_raw_data_score(data_dir, n_ans, n_files=102)
         print('Data Loaded.')
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         print('Sim generated')
 
         models = {
-            'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True'),
+            'Logistic Regression': LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True')
             # 'Linear Regression': LinearRegressionWrapper(),
             # 'Linear SVM': LinearSVCWrapper(n_ans=n_ans),
             # 'Ridge Regression': RidgeWrapper(alpha=2)
@@ -136,5 +136,42 @@ if __name__ == '__main__':
             print('high score feature:\n', sorted_features[:20])
             print('low score feature :\n', sorted_features[-20:])
             print()
+    elif h_mode==2:
+        questions, answers, scores = get_raw_data_score(data_dir, n_ans, n_files=102)
+        print('Data Loaded.')
 
+        Xq, Xa, feature_names = transform_raw_data(questions, answers, remove_tag=False)
+        print('Data transformed')
+
+        Y = reguralize_score(scores, n_ans)
+
+        Xqtr, Xatr, Ytr, Xqte, Xate, Yte = split_data(Xq, Xa, Y, n_ans)
+        Xqtr_t, Xatr_t, Ytr, Xqte_t, Xate_t, Yte = split_data(questions, answers, Y, n_ans)
+        print('Data Splitted')
+
+
+        models = {
+            'Dummy Heuristic': DummyHeuristic(n_ans),
+            'Length Heuristic by Char': CharLengthHeuristic(n_ans),
+            'Length Heuristic by Word': WordLengthHeuristic(n_ans),
+            'Length Heuristic by Char and Code': CharNCodeLengthHeuristic(n_ans),
+            'Length Heuristic by Sentence': SentenceLengthHeuristic(n_ans),
+            'Length Heuristic by Sentence and Code': SentenceNCodeLengthHeuristic(n_ans),
+            'Length Heuristic by Average Sentence Length': AvgSentenceLengthHeuristic(n_ans)
+        }
+
+        for name, model in models.items():
+
+            Xtr = sp.sparse.hstack((Xatr, np.array([model.predict_score(Xatr_t)]).transpose()))
+            Xte = sp.sparse.hstack((Xate, np.array([model.predict_score(Xate_t)]).transpose()))
+            m = LogisticRegressionWrapper(n_ans=n_ans, penalty='l2', fit_intercept='True', n_jobs=-1);
+            m.fit(Xtr, Ytr)
+            
+            score_ans_tr = m.predict_score(Xtr)
+            score_ans_te = m.predict_score(Xte)
+
+            print('-- {}+LogisticRegression --'.format(name))
+            print('training set accuracy:', prec_at_1(score_ans_tr, Ytr, n_ans))
+            print('test set accuracy:    ', prec_at_1(score_ans_te, Yte, n_ans))
+            print()
     print('done')

@@ -2,6 +2,7 @@ import sys
 
 from bapred.Utils import *
 
+# This file is for searching occurance of specifiy words in dataset
 
 def include_all_subs(string, subs):
     '''

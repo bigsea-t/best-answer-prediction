@@ -1,10 +1,12 @@
 from sklearn.linear_model import LogisticRegression, LinearRegression, Ridge
 from sklearn.svm import SVC, LinearSVC
 
-from bapred.Utils import *
+from bapred.Utils import binarize_score
 
+# ModelWrapper.py is for consistent interface of different models
 
 def sort_features(feature_names, score):
+    '''sort features according to their scores'''
     return sorted(zip(score, feature_names), reverse=True)
 
 
@@ -22,6 +24,11 @@ class LogisticRegressionWrapper(LogisticRegression):
 
     def sort_features(self, feature_names):
         return sort_features(feature_names, self.coef_[0])
+    
+    @staticmethod
+    def prec_at_1(model, X, y, n_ans=10):
+        Y = model.predict_proba(X)[:, 1]
+        return prec_at_1(Y, y, n_ans)
 
 
 class SVCWrapper(SVC):
@@ -38,6 +45,11 @@ class SVCWrapper(SVC):
 
     def sort_features(self, feature_names):
         return sort_features(feature_names, self.coef_[0])
+    
+    @staticmethod
+    def prec_at_1(model, X, y, n_ans=10):
+        Y = model.decision_function(X)
+        return prec_at_1(Y, y, n_ans)
 
 
 class LinearSVCWrapper(LinearSVC):
@@ -54,6 +66,11 @@ class LinearSVCWrapper(LinearSVC):
 
     def sort_features(self, feature_names):
         return sort_features(feature_names, self.coef_[0])
+    
+    @staticmethod
+    def prec_at_1(model, X, y, n_ans=10):
+        Y = model.decision_function(X)
+        return prec_at_1(Y, y, n_ans)
 
 
 class LinearRegressionWrapper(LinearRegression):
@@ -62,6 +79,11 @@ class LinearRegressionWrapper(LinearRegression):
 
     def sort_features(self, feature_names):
         return sort_features(feature_names, self.coef_)
+    
+    @staticmethod
+    def prec_at_1(model, X, y, n_ans=10):
+        Y = model.predict(X)
+        return prec_at_1(Y, y, n_ans)
 
 
 class RidgeWrapper(Ridge):
@@ -70,3 +92,8 @@ class RidgeWrapper(Ridge):
 
     def sort_features(self, feature_names):
         return sort_features(feature_names, self.coef_)
+    
+    @staticmethod
+    def prec_at_1(model, X, y, n_ans=10):
+        Y = model.predict(X)
+        return prec_at_1(Y, y, n_ans)
