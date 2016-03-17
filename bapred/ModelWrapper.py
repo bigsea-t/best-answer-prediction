@@ -1,7 +1,7 @@
 from sklearn.linear_model import LogisticRegression, LinearRegression, Ridge
 from sklearn.svm import SVC, LinearSVC
 
-from bapred.Utils import *
+from bapred.Utils import binarize_score
 
 # ModelWrapper.py is for consistent interface of different models
 

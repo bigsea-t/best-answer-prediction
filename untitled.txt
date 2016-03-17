@@ -1,0 +1,80 @@
+-- Length Heuristic by Char and Code --
+accuracy:     0.207526621491
+
+-- Length Heuristic by Word --
+accuracy:     0.187560503388
+
+-- Length Heuristic by Char --
+accuracy:     0.192279767667
+
+-- Length Heuristic by Sentence and Code --
+accuracy:     0.219990319458
+
+-- Length Heuristic by Sentence --
+accuracy:     0.202928363988
+
+-- Length Heuristic by Average Sentence Length --
+accuracy:     0.102855759923
+
+-- Dummy Heuristic --
+accuracy:     0.0986205227493
+
+Remove Tags:
+-- Length Heuristic by Char+LogisticRegression --
+training set accuracy: 0.222652468538
+test set accuracy:     0.194094869313
+
+-- Length Heuristic by Average Sentence Length+LogisticRegression --
+training set accuracy: 0.22458857696
+test set accuracy:     0.178121974831
+
+-- Length Heuristic by Word+LogisticRegression --
+training set accuracy: 0.223943207486
+test set accuracy:     0.175701839303
+
+-- Length Heuristic by Sentence and Code+LogisticRegression --
+training set accuracy: 0.240884156179
+test set accuracy:     0.219748305905
+
+-- Length Heuristic by Sentence+LogisticRegression --
+training set accuracy: 0.231848983543
+test set accuracy:     0.193126815102
+
+-- Dummy Heuristic+LogisticRegression --
+training set accuracy: 0.222652468538
+test set accuracy:     0.179574056147
+
+-- Length Heuristic by Char and Code+LogisticRegression --
+training set accuracy: 0.222168441433
+test set accuracy:     0.208131655373
+
+
+Not Remove Tags
+-- Length Heuristic by Char and Code+LogisticRegression --
+training set accuracy: 0.320264601484
+test set accuracy:     0.308325266215
+
+-- Dummy Heuristic+LogisticRegression --
+training set accuracy: 0.322200709906
+test set accuracy:     0.302032913843
+
+-- Length Heuristic by Sentence and Code+LogisticRegression --
+training set accuracy: 0.324620845434
+test set accuracy:     0.315585672798
+
+-- Length Heuristic by Word+LogisticRegression --
+training set accuracy: 0.324136818328
+test set accuracy:     0.309777347531
+
+-- Length Heuristic by Sentence+LogisticRegression --
+training set accuracy: 0.324782187803
+test set accuracy:     0.314617618587
+
+-- Length Heuristic by Char+LogisticRegression --
+training set accuracy: 0.324782187803
+test set accuracy:     0.304453049371
+
+-- Length Heuristic by Average Sentence Length+LogisticRegression --
+training set accuracy: 0.32284607938
+test set accuracy:     0.304453049371
+

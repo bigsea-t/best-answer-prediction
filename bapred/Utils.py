@@ -3,7 +3,6 @@ import json
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import re
 from os import listdir
-from bapred.ModelWrapper import *
 
 
 def get_json(data_dir, n_ans, n_files=None):
@@ -112,7 +111,10 @@ def reguralize_score(y, n_ans):
 
 def split_data(Xq, Xa, Y, n_ans, train_size=0.75):
     '''split data to train and test data'''
-    n_samples, n_features = Xq.shape
+    try:
+        n_samples, n_features = Xq.shape
+    except:
+        n_samples = len(Xq)
     n_train_q = int(n_samples * train_size)
     n_train_a = n_train_q * n_ans
 
@@ -136,6 +138,7 @@ def prec_at_1(Yprob, Y, n_ans):
 
 def prec_at_1_model(model, X, y):
     '''calculate the accuracy of a model'''
+    import bapred.ModelWrapper
     n_ans = 10
-    Y = eval(model.__class__.__name__+"Wrapper").predict_score(model, X)
+    Y = eval("bapred.ModelWrapper."+model.__class__.__name__+"Wrapper").predict_score(model, X)
     return prec_at_1(Y, y, n_ans)
