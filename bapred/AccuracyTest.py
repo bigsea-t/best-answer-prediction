@@ -3,6 +3,7 @@ import sys
 from bapred.ModelWrapper import *
 from sklearn.decomposition import TruncatedSVD
 import scipy as sp
+from bapred.Utils import *
 
 # This script is for test the accuracy of different models
 
